@@ -1,0 +1,18 @@
+import geopy
+import pandas as pd
+
+
+def get_zipcode(df, geolocator, lat_field, lon_field):
+    location = geolocator.reverse((df[lat_field], df[lon_field]))
+    return location.raw['address']['postcode']
+
+
+geolocator = geopy.Nominatim(user_agent='1234')
+
+
+df = pd.DataFrame({
+    'Lat': [23.21285],
+    'Lon': [87.94383]
+})
+zipcodes = df.apply(get_zipcode, axis=1, geolocator=geolocator, lat_field='Lat', lon_field='Lon')
+print(zipcodes)
